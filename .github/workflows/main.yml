@@ -39,7 +39,7 @@ jobs:
         fi
 
     - name: Upload font to repository
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Foghorn.ttf
         path: Foghorn.ttf
