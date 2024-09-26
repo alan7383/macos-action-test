@@ -11,31 +11,34 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # Mettre à jour vers v3
+      uses: actions/checkout@v3  # Node.js 20 compatible
+
+    - name: List possible runtime paths
+      run: |
+        # Lister les versions de watchOS disponibles
+        echo "Listing runtime paths..."
+        ls /Library/Developer/CoreSimulator/Profiles/Runtimes/
 
     - name: Verify file path
       run: |
-        # Lister les fichiers dans le répertoire pour vérifier la présence de Foghorn.ttf
-        ls -R /Library/Developer/CoreSimulator/Volumes/watchOS_21R355/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS\ 10.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/
+        # Lister les fichiers pour trouver Foghorn.ttf
+        ls -R /Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS*
 
     - name: Download watchOS SDK
       run: |
-        # Crée un dossier temporaire pour télécharger le SDK
-        mkdir -p ~/watchos-sdk
-        cd ~/watchos-sdk
-
-        # Chemin vers Foghorn.ttf
-        FONT_PATH="/Library/Developer/CoreSimulator/Volumes/watchOS_21R355/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS 10.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/NTKFoghornFaceBundle.bundle/Foghorn.ttf"
+        # Chemin vers Foghorn.ttf - vérifier le bon runtime
+        FONT_PATH="/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS_21R355/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/NTKFoghornFaceBundle.bundle/Foghorn.ttf"
         
         if [ -f "$FONT_PATH" ]; then
           echo "Police Foghorn trouvée ! Copie du fichier..."
           cp "$FONT_PATH" $GITHUB_WORKSPACE/Foghorn.ttf
         else
           echo "Fichier non trouvé, vérifiez le chemin ou le SDK."
+          exit 1  # Provoquer une erreur si le fichier n'est pas trouvé
         fi
 
     - name: Upload font to repository
-      uses: actions/upload-artifact@v3  # Compatible Node.js
+      uses: actions/upload-artifact@v3  # Compatible Node.js 20
       with:
         name: Foghorn.ttf
         path: Foghorn.ttf
