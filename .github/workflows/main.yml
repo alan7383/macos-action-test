@@ -11,7 +11,12 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3  # Mettre à jour vers v3
+
+    - name: Verify file path
+      run: |
+        # Lister les fichiers dans le répertoire pour vérifier la présence de Foghorn.ttf
+        ls -R /Library/Developer/CoreSimulator/Volumes/watchOS_21R355/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS\ 10.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/
 
     - name: Download watchOS SDK
       run: |
@@ -19,12 +24,7 @@ jobs:
         mkdir -p ~/watchos-sdk
         cd ~/watchos-sdk
 
-        # Télécharge le SDK correspondant
-        # Remplacer l'URL par l'URL réelle du SDK si tu la connais
-        # ou utilise un script pour récupérer les SDK installés.
-        echo "Téléchargement du SDK en cours..."
-
-        # Accède au chemin donné dans le tweet et télécharge Foghorn.ttf
+        # Chemin vers Foghorn.ttf
         FONT_PATH="/Library/Developer/CoreSimulator/Volumes/watchOS_21R355/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS 10.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/NTKFoghornFaceBundle.bundle/Foghorn.ttf"
         
         if [ -f "$FONT_PATH" ]; then
@@ -35,7 +35,7 @@ jobs:
         fi
 
     - name: Upload font to repository
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3  # Compatible Node.js
       with:
         name: Foghorn.ttf
         path: Foghorn.ttf
