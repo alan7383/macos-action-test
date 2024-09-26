@@ -13,10 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install Xcode tools
-      run: |
-        xcode-select --install
-
     - name: Download watchOS SDK
       run: |
         # Crée un dossier temporaire pour télécharger le SDK
