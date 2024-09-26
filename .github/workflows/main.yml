@@ -1,0 +1,45 @@
+name: Download Foghorn Font
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Xcode tools
+      run: |
+        xcode-select --install
+
+    - name: Download watchOS SDK
+      run: |
+        # Crée un dossier temporaire pour télécharger le SDK
+        mkdir -p ~/watchos-sdk
+        cd ~/watchos-sdk
+
+        # Télécharge le SDK correspondant
+        # Remplacer l'URL par l'URL réelle du SDK si tu la connais
+        # ou utilise un script pour récupérer les SDK installés.
+        echo "Téléchargement du SDK en cours..."
+
+        # Accède au chemin donné dans le tweet et télécharge Foghorn.ttf
+        FONT_PATH="/Library/Developer/CoreSimulator/Volumes/watchOS_21R355/Library/Developer/CoreSimulator/Profiles/Runtimes/watchOS 10.0.simruntime/Contents/Resources/RuntimeRoot/System/Library/NanoTimeKit/FaceBundles/NTKFoghornFaceBundle.bundle/Foghorn.ttf"
+        
+        if [ -f "$FONT_PATH" ]; then
+          echo "Police Foghorn trouvée ! Copie du fichier..."
+          cp "$FONT_PATH" $GITHUB_WORKSPACE/Foghorn.ttf
+        else
+          echo "Fichier non trouvé, vérifiez le chemin ou le SDK."
+        fi
+
+    - name: Upload font to repository
+      uses: actions/upload-artifact@v2
+      with:
+        name: Foghorn.ttf
+        path: Foghorn.ttf
